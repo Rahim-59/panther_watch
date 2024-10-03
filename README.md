@@ -1,13 +1,13 @@
-# Panther-Watch
+ Panther-Watch
 
-# Software Engineering Project 
+ Software Engineering Project 
 
-# Name (s): Sara Ghasedi, Rahim Ali, Paolo Calingasan, Elias Treadway, Muhammad Anas 
+ Name (s): Sara Ghasedi, Rahim Ali, Paolo Calingasan, Elias Treadway, Muhammad Anas 
 
-# Semester: Fall 2024 
+ Semester: Fall 2024 
 
-# Group Number: 4 
+ Group Number: 4 
 
-# Name of the Guide: Dr. Tushara Sadasivuni 
+ Name of the Guide: Dr. Tushara Sadasivuni 
 
-# Project documentation will go here
+ Project documentation will go here
