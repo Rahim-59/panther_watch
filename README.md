@@ -1,4 +1,4 @@
- Panther-Watch
+ panther-watch
 
  Software Engineering Project 
 
