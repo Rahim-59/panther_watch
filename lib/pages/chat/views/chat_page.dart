@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:panther_watch/pages/chat/views/board_page.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -6,7 +7,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-
   final List<Map<String, String>> boards = [
     {
       'title': 'General Discussion',
@@ -18,13 +18,11 @@ class _ChatPageState extends State<ChatPage> {
     },
     {
       'title': 'Flutter Developers',
-      'lastComment':
-          'Last comment by Carol: "How do I handle state management?"'
+      'lastComment': 'Last comment by Carol: "How do I handle state management?"'
     },
     {
       'title': 'Flutter Developers',
-      'lastComment':
-          'Last comment by Carol: "How do I handle state management?"'
+      'lastComment': 'Last comment by Carol: "How do I handle state management?"'
     },
     {
       'title': 'General Discussion',
@@ -36,8 +34,7 @@ class _ChatPageState extends State<ChatPage> {
     },
     {
       'title': 'Flutter Developers',
-      'lastComment':
-          'Last comment by Carol: "How do I handle state management?"'
+      'lastComment': 'Last comment by Carol: "How do I handle state management?"'
     },
     {
       'title': 'General Discussion',
@@ -49,7 +46,10 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Community Board', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),),
+        title: Text(
+          'Community Board',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
         centerTitle: false,
       ),
       body: SafeArea(
@@ -82,7 +82,7 @@ class _ChatPageState extends State<ChatPage> {
                     trailing: Icon(Icons.arrow_forward_ios), // Trailing arrow icon
                     onTap: () {
                       // Define what happens when the tile is tapped
-                      print('Tapped on ${boards[index]['title']}');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => BoardPage(title: boards[index]['title']!)));
                     },
                   );
                 },

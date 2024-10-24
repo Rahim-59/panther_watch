@@ -16,4 +16,18 @@ class EventService {
 
     return response.body;
   }
+
+  static Future<String> getOrganizations(int buffer) async {
+    final url = Uri.parse('https://pin.gsu.edu/api/discovery/search/organizations').replace(queryParameters: {
+      'top': '10'
+    });
+
+    print(url);
+
+    final response = await http.get(
+      url,
+    );
+
+    return response.body;
+  }
 }
