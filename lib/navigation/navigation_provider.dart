@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:panther_watch/pages/chat/chat.dart';
+import 'package:panther_watch/pages/events/views/events_page.dart';
 import 'package:panther_watch/pages/home/home.dart';
 
 class NavigationProvider extends ChangeNotifier {
@@ -16,7 +17,7 @@ class NavigationProvider extends ChangeNotifier {
     ChatPage(),
     Placeholder(),
     HomePage(),
-    Placeholder(),
+    EventsPage(),
     Placeholder()
   ];
 
