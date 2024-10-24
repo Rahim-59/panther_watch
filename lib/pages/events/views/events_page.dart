@@ -123,7 +123,7 @@ class _EventsPageState extends State<EventsPage> {
                 ),
               ),
               Container(
-                height: 130,
+                height: 150,
                 child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: organizations.length,
@@ -137,6 +137,7 @@ class _EventsPageState extends State<EventsPage> {
                             child: Container(
                               width: 100,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
                                     width: 100,
@@ -144,7 +145,7 @@ class _EventsPageState extends State<EventsPage> {
                                     decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 58, 166), borderRadius: BorderRadius.circular(50), image: DecorationImage(image: NetworkImage(org.imageURL), fit: BoxFit.cover)),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(org.shortName)
+                                  Text(org.shortName, style: TextStyle(overflow: TextOverflow.ellipsis),)
                                 ],
                               ),
                             )),
@@ -161,6 +162,7 @@ class _EventsPageState extends State<EventsPage> {
               ListView.builder(
                   shrinkWrap: true,
                   itemCount: events.length,
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final event = events[index];
                     return Padding(

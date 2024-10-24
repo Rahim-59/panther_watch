@@ -79,23 +79,27 @@ class _BoardPageState extends State<BoardPage> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: 'Type your message...',
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () => _sendMessage(_controller.text, true, '${DateTime.now().hour}:${DateTime.now().minute} ${DateFormat("a").format(DateTime.now())}'), // User message
-                ),
-              ],
+                  SizedBox(width: 10),
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () => _sendMessage(_controller.text, true, '${DateTime.now().hour}:${DateTime.now().minute} ${DateFormat("a").format(DateTime.now())}'), // User message
+                  ),
+                ],
+              ),
             ),
           ),
         ],

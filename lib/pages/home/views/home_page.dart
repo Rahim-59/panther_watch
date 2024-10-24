@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:panther_watch/pages/chat/views/board_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -279,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                               Icons.arrow_forward_ios), // Trailing arrow icon
                           onTap: () {
                             // Define what happens when the tile is tapped
-                            print('Tapped on ${boards[index]['title']}');
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => BoardPage(title: boards[index]['title']!)));
                           },
                         );
                       },
