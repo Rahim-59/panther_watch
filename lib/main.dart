@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:panther_watch/firebase_options.dart';
 import 'package:panther_watch/navigation/navigation_provider.dart';
 import 'package:panther_watch/pages/home/home.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
