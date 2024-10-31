@@ -280,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                               Icons.arrow_forward_ios), // Trailing arrow icon
                           onTap: () {
                             // Define what happens when the tile is tapped
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => BoardPage(title: boards[index]['title']!)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => BoardPage(id: "1", title: boards[index]['title']!)));
                           },
                         );
                       },

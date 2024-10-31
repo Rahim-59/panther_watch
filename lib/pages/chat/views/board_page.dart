@@ -1,31 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class BoardPage extends StatefulWidget {
+  final String id;
   final String title;
 
-  const BoardPage({super.key, required this.title});
+  const BoardPage({super.key, required this.id, required this.title});
 
   @override
   _BoardPageState createState() => _BoardPageState();
 }
 
 class _BoardPageState extends State<BoardPage> {
-  final List<Map<String, dynamic>> _messages = [];
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
 
-  void _sendMessage(String text, bool isUserMessage, String date) {
-    if (text.trim().isEmpty) return;
+  Stream<List<DocumentSnapshot>> getMessagesStream() {
+    return FirebaseFirestore.instance
+        .collection('boards')
+        .doc(widget.id)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs);
+  }
 
-    setState(() {
-      _messages.add({
-        'text': text,
-        'isUserMessage': isUserMessage,
-        'date': date
-      });
+  Future<void> sendMessage(String content) async {
+    if (content.trim().isEmpty) return; 
+    await FirebaseFirestore.instance
+        .collection('boards')
+        .doc(widget.id)
+        .collection('messages')
+        .add({
+      'content': content,
+      'author': 'Anonymous', 
+      'timestamp': FieldValue.serverTimestamp(),
     });
-
-    _controller.clear();
+    _messageController.clear();
   }
 
   @override
@@ -35,68 +45,57 @@ class _BoardPageState extends State<BoardPage> {
         title: Text(widget.title),
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                final isUserMessage = message['isUserMessage'];
+            child: StreamBuilder<List<DocumentSnapshot>>(
+              stream: getMessagesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error loading messages'));
+                }
+                // if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                //   return Center(child: Text('No messages available'));
+                // }
 
-                return Align(
-                  alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    decoration: BoxDecoration(
-                      color: isUserMessage
-                          ? Color.fromARGB(255, 0, 58, 166) // Navy blue color
-                          : Colors.grey[300], // Gray for others
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Current User',
-                          style: TextStyle(color: isUserMessage ? Colors.grey : Colors.black, fontSize: 10),
-                        ),
-                        Text(
-                          message['text'],
-                          style: TextStyle(
-                            color: isUserMessage ? Colors.white : Colors.black,
-                          ),
-                        ),
-                        Text(
-                          message['date'],
-                          style: TextStyle(color: isUserMessage ? Colors.white : Colors.black, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                  ),
+                final messages = snapshot.data!;
+
+                return ListView.builder(
+                  reverse: true, // Start from the bottom for latest message
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    return ListTile(
+                      title: Text(message['author']),
+                      subtitle: Text(message['content']),
+                      trailing: Text(message['timestamp']?.toDate().toString() ?? ''),
+                    );
+                  },
                 );
               },
             ),
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
+                children: [
                   Expanded(
                     child: TextField(
-                      controller: _controller,
+                      controller: _messageController,
                       decoration: InputDecoration(
-                        hintText: 'Type your message...',
+                        hintText: 'Type a message...',
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
                   IconButton(
                     icon: Icon(Icons.send),
-                    onPressed: () => _sendMessage(_controller.text, true, '${DateTime.now().hour}:${DateTime.now().minute} ${DateFormat("a").format(DateTime.now())}'), // User message
+                    onPressed: () {
+                      sendMessage(_messageController.text);
+                    },
                   ),
                 ],
               ),
