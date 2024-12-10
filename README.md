@@ -29,13 +29,13 @@
 Ensure Flutter is installed (setup guide). Then run:
 
     ```bash
-    Copy code
     flutter pub get
+    ```
     Run the app:
-
     ```bash
-    Copy code
     flutter run
+    ```
+    
     🛠 Dependencies
     Make sure you have the following:
 
