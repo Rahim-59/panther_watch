@@ -5,10 +5,8 @@ class EventService {
 
   static Future<String> getEvents(int buffer) async {
     final url = Uri.parse('$baseUrl/search').replace(queryParameters: {
-      'take': '15'
+      'take': '$buffer'
     });
-
-    print(url);
 
     final response = await http.get(
       url,
