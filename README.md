@@ -10,8 +10,6 @@
 
  Name of the Guide: Dr. Tushara Sadasivuni 
 
- # Project documentation will go here
-
 # Panther Watch  
 
 **Panther Watch** is a Flutter app designed to enhance campus safety and engagement at Georgia State University (GSU).  
