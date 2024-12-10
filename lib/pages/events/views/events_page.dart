@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:panther_watch/events/models/Events.dart';
 import 'package:panther_watch/events/models/Organization.dart';
 import 'package:panther_watch/events/services/EventServices.dart';
 import 'package:panther_watch/pages/events/widgets/events_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventsPage extends StatefulWidget {
   @override
@@ -101,6 +101,13 @@ class _EventsPageState extends State<EventsPage> {
     }
   }
 
+  void _launchUrl(_url) async {
+    var url = Uri.parse(_url);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,19 +141,24 @@ class _EventsPageState extends State<EventsPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: Padding(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              width: 100,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 58, 166), borderRadius: BorderRadius.circular(50), image: DecorationImage(image: NetworkImage(org.imageURL), fit: BoxFit.cover)),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(org.shortName, style: TextStyle(overflow: TextOverflow.ellipsis),)
-                                ],
+                            child: InkWell(
+                              onTap: () {
+                                _launchUrl('https://pin.gsu.edu/organization/${org.websiteKey}');
+                              },
+                              child: Container(
+                                width: 100,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 58, 166), borderRadius: BorderRadius.circular(50), image: DecorationImage(image: NetworkImage(org.imageURL), fit: BoxFit.cover)),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(org.shortName, style: TextStyle(overflow: TextOverflow.ellipsis),)
+                                  ],
+                                ),
                               ),
                             )),
                       );
@@ -166,14 +178,19 @@ class _EventsPageState extends State<EventsPage> {
                   itemBuilder: (context, index) {
                     final event = events[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Padding(
                           padding: const EdgeInsets.only(bottom: 20),
-                          child: EventsCard(
-                            imageURL: event.imageURL,
-                            title: event.name,
-                            startDate: event.startDate,
-                            location: event.location,
+                          child: InkWell(
+                            onTap: () {
+                              _launchUrl('https://pin.gsu.edu/event/${event.id}');
+                            },
+                            child: EventsCard(
+                              imageURL: event.imageURL,
+                              title: event.name,
+                              startDate: event.startDate,
+                              location: event.location,
+                            ),
                           )),
                     );
                   })
