@@ -53,7 +53,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           // ElevatedButton(onPressed: () {
-          //   createBoard("Clubs & Organizations");
+          //   createBoard("Safety Concerns ");
           // }, child: Text("Board Creator")),
           SizedBox(height: 20),
           Expanded(

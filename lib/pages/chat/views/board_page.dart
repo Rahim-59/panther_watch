@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:panther_watch/authentication/service/AuthService.dart';
 
 class BoardPage extends StatefulWidget {
   final String id;
@@ -12,7 +13,52 @@ class BoardPage extends StatefulWidget {
 }
 
 class _BoardPageState extends State<BoardPage> {
+  bool isLoading = false;
+  String username = 'Anonymous';
   final TextEditingController _messageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _getInfo();
+  }
+
+  void _getInfo() async {
+    try {
+
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await AuthService.getUserDetails();
+
+      if (response != null) {
+        username = response['username'];
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   Stream<List<DocumentSnapshot>> getMessagesStream() {
     return FirebaseFirestore.instance
@@ -32,7 +78,7 @@ class _BoardPageState extends State<BoardPage> {
         .collection('messages')
         .add({
       'content': content,
-      'author': 'Anonymous', 
+      'author': username, 
       'timestamp': FieldValue.serverTimestamp(),
     });
     _messageController.clear();
